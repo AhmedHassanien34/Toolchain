@@ -1,0 +1,41 @@
+1st command:
+target remote localhost:3333
+//used to connect with the gdb server
+
+Note: the word "monitor" is added to the command in case of using gdb client 
+2nd command:
+reset init
+
+3rd command:
+flash write_image erase final.elf
+//download the code
+
+4th command:
+reset halt
+// Reset then halt
+
+5th command:
+resume
+
+6th command:
+halt
+//stop
+
+7th command:
+reset
+
+8th command:
+mdw address count
+//display word, count [address] [count] : number of words to display
+
+9th command:
+mwd
+//write word [address]
+
+10th command:
+bp [address len [hw]]
+// put break point in this address ( 2 hw )
+
+11th command:
+quit
+//drop the gdb connection

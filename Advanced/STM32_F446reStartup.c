@@ -1,29 +1,63 @@
 #include <stdint.h>
 
+void main (void);
+
 #define SRAM_START 		0x20000000
 #define SRAM_SIZA 		(128*1024)
 #define SRAM_END		((SRAM_START)+(SRAM_SIZA))
 #define STACK_START		(SRAM_END)
 
+extern uint32_t _sdata;
+extern uint32_t _edata;
+extern uint32_t _sbss ;
+extern uint32_t _ebss ;
+extern uint32_t _etext;
 
-void Reset_Handler(void) __attribute__ ((section ("Random_Section")));
+//void Reset_Handler(void) __attribute__ ((section ("Random_Section")));
+
+void Reset_Handler(void);
 
 void Reset_Handler(void)
 {
 	/* 1- Copy .data section from flash to SRAM */
-
+	uint32_t Size    = (uint32_t)&_edata  - (uint32_t) &_sdata;
+	uint8_t* SrcPtr  = (uint8_t*)&_etext;   /* Start of .data section in flash*/ 
+	uint8_t* DestPtr = (uint8_t*)&_etext;   /* Start of .data section in SRAM*/ 
+	
+	for(uint32_t i=0; i < Size ; i++)
+	{
+		*DestPtr = *SrcPtr ;		/* *DestPtr++ = *SrcPtr++; */
+		DestPtr++;
+		SrcPtr++;
+		
+	}
+	
 	/* 2- Initialise .bss section in SRAM to zero */
-
+	Size = (uint32_t)&_ebss  - (uint32_t) &_sbss;
+	DestPtr  = (uint8_t*)&_sbss;
+	
+	for(uint32_t i=0; i < Size ; i++)
+	{
+		*DestPtr = 0u ;		/* *DestPtr++ = 0u; */
+		DestPtr++;
+		
+		
+	}
+	
 	/* 3- Call init function of standard library */
 
 	/* 4- Call main */ 
-		
+	main();	
+	
+	while(1);   
 }
 
 void Default_Handler(void)
 {
 	while(1);
 }
+
+
 
 void NMI_Handler				(void) __attribute__((weak,alias("Default_Handler")));
 void HardFault_Handler			(void) __attribute__((weak,alias("Default_Handler")));
@@ -193,15 +227,15 @@ uint32_t Vectors[] __attribute__((section(".isr_vector"))) =
     (uint32_t)&SDIO_IRQHandler                ,
     (uint32_t)&TIM5_IRQHandler                ,
     (uint32_t)&SPI3_IRQHandler                ,
-    (uint32_t)&UART4_IRQHandler       	     ,
-    (uint32_t)&UART5_IRQHandler       	     ,
-    (uint32_t)&TIM6_DAC_IRQHandler    	     ,
-    (uint32_t)&TIM7_IRQHandler        	     ,
-    (uint32_t)&DMA2_Stream0_IRQHandler	     ,
-    (uint32_t)&DMA2_Stream1_IRQHandler	     ,
-    (uint32_t)&DMA2_Stream2_IRQHandler	     ,
-    (uint32_t)&DMA2_Stream3_IRQHandler	     ,
-    (uint32_t)&DMA2_Stream4_IRQHandler	     ,
+    (uint32_t)&UART4_IRQHandler       	      ,
+    (uint32_t)&UART5_IRQHandler       	      ,
+    (uint32_t)&TIM6_DAC_IRQHandler    	      ,
+    (uint32_t)&TIM7_IRQHandler        	      ,
+    (uint32_t)&DMA2_Stream0_IRQHandler	      ,
+    (uint32_t)&DMA2_Stream1_IRQHandler	      ,
+    (uint32_t)&DMA2_Stream2_IRQHandler	      ,
+    (uint32_t)&DMA2_Stream3_IRQHandler	      ,
+    (uint32_t)&DMA2_Stream4_IRQHandler	      ,
 	0,
 	0,
     (uint32_t)&CAN2_TX_IRQHandler       		 ,

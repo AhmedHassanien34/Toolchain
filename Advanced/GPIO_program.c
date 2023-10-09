@@ -27,12 +27,7 @@
 
 static GPIO_RegDef_t* GPIO_PORT[GPIO_PERIPHERAL_NUM] = {GPIOA,GPIOB,GPIOC,GPIOD,GPIOE,GPIOF,GPIOG,GPIOH};
 
-/***************************************************************************************
-/* @fn GPIO_u8PinInit
- * @brief the function initialization the GPIO pin according to the input paramters
- * @param[in] PinConfg : the initialization values of the pin
- * @retval ErrorStatus
- */
+
 uint8_t GPIO_u8PinInit(const GPIO_PinConfig_t* PinConfig )
 {
 	uint8_t Local_u8ErrorState = OK;
